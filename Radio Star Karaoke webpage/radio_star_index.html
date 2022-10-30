@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <title>Radio Star Karaoke</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="scripts/bootstrap.min.css">
+      <script src="scripts/jquery.min.js"></script>
+      <script src="scripts/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="rskcss.css">
+      <link rel="shortcut icon" href="images/voice icon.png" />
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse visible-xs">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Radio Star Karaoke</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+              <li class="activeStartPause">
+                <span onclick="playSong();" class="activeAction">Start</span>
+              </li>
+              <li class="activeStop">
+                <span onclick="stopSong();" class="activeAction">Stop</span>
+              </li>
+              <li class="activeRepeat">
+                <span onclick="repeatSongOn();" class="activeAction">Repeat</span>
+              </li>
+              <li>
+                <span onclick="getCurrentTime();" class="activeAction">
+                  Current Timing: <span class="showCurrentTimeSong"></span>
+                </span>
+              </li>
+              <hr>
+              <li>
+                <span data-toggle="modal" data-target="#showReadMe" class="activeAction">Important Instructions</span>
+              </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row content">
+        <div class="col-sm-3 sidenav hidden-xs">
+          <h2>Radio Star Karaoke</h2>
+          <ul class="nav nav-pills nav-stacked">
+            <li class="activeStartPause">
+              <span onclick="playSong();" class="activeAction">Start</span>
+            </li>
+            <li class="activeStop">
+              <span onclick="stopSong();" class="activeAction">Stop</span>
+            </li>
+            <li class="activeRepeat">
+              <span onclick="repeatSongOn();" class="activeAction">Repeat</span>
+            </li>
+            <li>
+              <span onclick="getCurrentTime();" class="activeAction">
+                Current Timing: <span class="showCurrentTimeSong"></span>
+              </span>
+            </li>
+            <hr>
+            <li>
+              <span data-toggle="modal" data-target="#showReadMe" class="activeAction">Important Instructions</span>
+            </li>
+          </ul><br>
+        </div>
+        <br>
+
+        <div class="col-sm-9">
+          <div class="table-responsive">
+            <h4>Import file ".mp3" and file ".lrc"</h4>
+
+            <hr>
+          </div>
+          <div>
+            <form name="inputFileMedia" method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label for="songImport">Song Name(.mp3)<span class="setCorlorRed">*</span> :</label>
+                <div id="spaceInputSong">
+                  <input type="file" class="form-control" rows="5" name="songImport" required id="fileSong" accept="audio/*">
+                </div>
+
+              </div>
+              <div class="form-group">
+                <label for="lyricImport">Song Lyrics(.lrc)<span class="setCorlorRed">*</span> :</label>
+                <input type="file" class="form-control" rows="5" name="lyricImport" required id="fileLyric">
+              </div>
+            </form>
+          </div>
+          <div>
+            <audio id="audioSong" controls>
+              <source src="" id="srcSong" />
+            </audio>
+          </div>
+          <div class="well">
+            <canvas id="canvas" style="width: 100%; height: 200px;"></canvas>
+          </div>
+          <div class="well">
+              <div id="inputTextToSave" style="overflow: scroll; height: 200px"></div>
+              <script src="rskjs.js"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="showReadMe" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Important Instructions</h4>
+          </div>
+          <div class="modal-body">
+            <p>For this to work, you need two things:</p>
+            <ul style=“list-style-type:disc>
+              <li>An <b><span class="setCorlorRed">.mp3</span></b> file of your song of choice</li>
+              <li>A <b><span class="setCorlorRed">.lrc</span></b> file of your song of choice</li>
+            </ul>
+            <p>LRC (short for LyRiCs) is a computer file format that synchronizes song lyrics with an audio file, such as MP3, Vorbis or MIDI.
+              The <a href="https://en.wikipedia.org/wiki/LRC_(file_format)#:~:text=LRC%20%28short%20for%20LyRiCs%29%20is%20a%20computer%20file,digital%20audio%20players%2C%20the%20song%20lyrics%20are%20displayed.">LRC file format</a> was introduced by Taiwan-based Kuo Shiang-Shiang's <i>Lyrics Displayer</i>.
+              This was one of the first programs to simulate Karaoke performances. As with modern Karaoke machines, it usually displays the whole line of lyrics, though it is also possible to display words at a time. This is done by creating a time tag for each word rather than each line.
+            </p>
+            <p>The Line Time Tags are in the format <b>[mm:ss.xx]</b> where <b>mm</b> is minutes, <b>ss</b> is seconds and <b>xx</b> is hundredths of a second.
+            An example is in the picture below.</p>
+            <p>
+            <img src="images/lyric_format.png" alt="" class="fixed-size-img">
+            <p><span class="setCorlorRed">Note:</span></p>
+            <p>
+              You need to have the <span class="setCorlorRed">.mp3</span> and <span class="setCorlorRed">.lrc</span> files stored in a folder that you can remember.
+              You can create a lyric file in a text editor like Notepad for Windows or TextEdit for Mac OS X. Here's how to do it:</p>
+            <p><span class="setFrontBold">Step 1:</span> At the top of your LRC file, you should include the song name, artists, and album. You will need to use special codes to enter these so that the player can recognize them.</p>
+            <ul style=“list-style-type:disc>
+              <li>Add the song title. The song title should be the first line of your LRC file.
+                Put it between square brackets and add ti: before it.
+                A song called "This is a Song" would be formatted as [ti:This is a Song].
+              </li>
+              <li>Add the name of the artist. This is formatted the same way as the Song Title, except with the code ar: before it.
+                An artist named "Artist" would be formatted as [ar:Artist]
+              </li>
+              <li>Add the name of the album. Like the Artists and Song Title entry, this should be placed in brackets.
+                The album code is al: before the album name.
+                An album called "Album" would be formatted as [al:Album]
+              </li>
+              <li><b>(Optional)</b> Add any additional information.
+                You can add your name to the LRC file by using the code [by:Your Name], and you can add the song’s composer by using the tag [au:Author].
+                Not all players can read this extra information.
+              </li>
+            </ul>
+            <p>
+              <img width="500px" src="images/step1_example.png" alt="" class="fixed-size-img">
+            </p>
+
+            <p><span class="setFrontBold">Step 2:</span> You can either type in the lyrics yourself, or copy the text from a lyrics website.
+              I would recommend <a href="https://www.lyricsify.com/.">lyricsify.com</a> for finding the <span class="setCorlorRed">.lrc</span> files you need.</p>
+              <pre><b><span class="setCorlorRed">WARNING:</span></b> The website does not have a lyric file for every song.</pre>
+              <p>Enter all of the lyrics into the file, with each line of lyrics on a new line in the text document.</p>
+              <p>
+                <img width="500px" src="images/step2_example.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p><span class="setFrontBold">Step 3:</span> Open the song in a media player, like Windows Media Player for Windows or Mac Media Player for Mac OS X.
+                You will need to find the time that each lyric is sung or spoken, so you will need to open the song in a player that you can start and stop as you please.
+                Your media player should also allow you to see the playback time in hundredths of seconds.
+              </p>
+              <p>
+                <img width="500px" src="images/step3_example.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p><span class="setFrontBold">Step 4:</span> Start adding timestamps.
+                Play the song, and pause it each time a line of lyrics starts.
+                Make note of the time in the player, and place your cursor at the front of the appropriate line in the LRC file.
+              </p>
+              <ul style=“list-style-type:disc>
+                <li>Enter the time in square brackets.
+                  The format for time is broken into three sections: minute, second, and hundredths of a second.
+                  For a lyric that starts at 1 minute, 32 seconds, and 45 hundredths of a second, the tag would look like [01:32:45] OR [01:32.45].
+                </li>
+                <li>Most players will only be able to display up to 95 characters per timestamp.
+                  If you have a long line of lyrics, you may need to separate it with another timestamp.
+                  If you want each word to appear when it is sung, you will need to create a separate timestamp for each word in the song.
+                </li>
+                <li>
+                  Hundredths of a second can be omitted, resulting in a tag that looks like [01:32].
+                </li>
+                <li>Sometimes lyrics repeat themselves throughout the song, especially choruses.
+                  You can add a different time tag right next to the original one so that you don't have to type it twice.
+                  For example: [01:26.03][01:56.24]"Chorus lyrics". <b>(Optional)</b>
+                </li>
+              </ul>
+              <p>
+                <img width="500px" src="images/step4_example.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p><span class="setFrontBold">Step 5:</span> Save the file as an LRC file.
+                Once you have your timestamps all completed, you can save the file as an LRC file and test it out.
+                Click File and select Save As.
+              </p>
+              <ul style=“list-style-type:disc>
+                <li>
+                  The file name must be the exact same as the filename of the song.
+                </li>
+                <li>
+                  Change the extension to .lrc.
+                  To do this, click the "Save as type" dropdown menu and select All Files.
+                  Change the extension of the file from .txt to .lrc.
+                </li>
+              </ul>
+              <p>
+                <img width="500px" src="images/step5_example.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p><span class="setFrontBold">Step 6:</span> Place the LRC file in the same location as the music file.
+                As it was said earlier, in order for the player to load the file, it must be located in the same directory as the music file.
+                This is true for both MP3 players and media players on your computer.
+              </p>
+              <p>
+                <img width="500px" src="images/step6_example.png" alt="" class="fixed-size-img">
+              </p>
+
+              <pre>This was how to manually create LRC files. You can also use a music player plugin to create LRC files as well.</pre>
+
+              <p><span class="setFrontBold">Step 1:</span> Download and install the <a href="https://www.crintsoft.com/minilyrics/download/.">MiniLyrics</a> plugin.
+                It will assist you in synchronizing the lyrics.
+              </p>
+              <ul style=“list-style-type:disc>
+                <li>
+                  Navigate to the download page of MiniLyrics.
+                </li>
+                <li>
+                  Click the download button. Run the installer.
+                </li>
+                <li>
+                  It will guide you through the installation of MiniLyrics.
+                </li>
+              </ul>
+
+              <p><span class="setFrontBold">Step 2:</span> Open your favorite music player.
+                The MiniLyrics window should show up.
+              </p>
+              <ul style=“list-style-type:disc>
+                <li>
+                  <b>If it does not</b>, try another music player like Windows Media Player, iTunes, VLC, Winamp or Foobar2000.
+                </li>
+                <li>
+                  Right click the window and select 'Lyrics editor...'.
+                </li>
+              </ul>
+              <p>
+                <img width="500px" src="images/step2_example2.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p>
+                <span class="setFrontBold">Step 3:</span> Type or paste the lyrics of the song.
+              </p>
+              <ul style=“list-style-type:disc>
+                <li>
+                  Make sure to remove any annotations like 'Chorus' or '[x2]'.
+                </li>
+                <li>
+                  Fill in the song details.
+                </li>
+              </ul>
+              <p>
+                <img width="500px" src="images/step3_example2.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p>
+                <span class="setFrontBold">Step 4:</span> Start playing the song.
+              </p>
+              <ul style=“list-style-type:disc>
+                <li>
+                  When the lyric starts to be sung, click the orange button. You can also hit F7.
+                </li>
+                <li>
+                  Do this for every lyric until each one has a timecode before it.
+                </li>
+              </ul>
+              <p>
+                <img width="500px" src="images/step4_example2.png" alt="" class="fixed-size-img">
+              </p>
+
+              <p>
+                <span class="setFrontBold">Step 5:</span>
+                After your lyrics are synchronized, click 'File', then 'Save as...'.
+                Pick a location for the .lrc file and your .lrc file will be saved there.
+              </p>
+              <p>
+                <img width="500px" src="images/step5_example2.png" alt="" class="fixed-size-img">
+              </p>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <p>© Copyright, Darmagon Industries</p>
+    </footer>
+  </body>
+</html>
